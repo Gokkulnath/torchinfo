@@ -1,24 +1,27 @@
-# torch-summary
-[![Python 3.6+](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/downloads/release/python-360/)
-[![PyPI version](https://badge.fury.io/py/torch-summary.svg)](https://badge.fury.io/py/torch-summary)
-[![Build Status](https://travis-ci.org/TylerYep/torch-summary.svg?branch=master)](https://travis-ci.org/TylerYep/torch-summary)
-[![GitHub license](https://img.shields.io/github/license/TylerYep/torch-summary)](https://github.com/TylerYep/torch-summary/blob/master/LICENSE)
-[![codecov](https://codecov.io/gh/TylerYep/torch-summary/branch/master/graph/badge.svg)](https://codecov.io/gh/TylerYep/torch-summary)
-[![Downloads](https://pepy.tech/badge/torch-summary)](https://pepy.tech/project/torch-summary)
+# torchinfo (beta)
+Please use [https://pypi.org/project/torch-summary/](https://pypi.org/project/torch-summary/) for now, thanks!
 
-Torch-summary provides information complementary to what is provided by `print(your_model)` in PyTorch, similar to Tensorflow's `model.summary()` API to view the visualization of the model, which is helpful while debugging your network. In this project, we implement a similar functionality in PyTorch and create a clean, simple interface to use in your projects.
+
+[![Python 3.6+](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/downloads/release/python-360/)
+[![PyPI version](https://badge.fury.io/py/torchinfo.svg)](https://badge.fury.io/py/torchinfo)
+[![Build Status](https://travis-ci.org/TylerYep/torchinfo.svg?branch=master)](https://travis-ci.org/TylerYep/torchinfo)
+[![GitHub license](https://img.shields.io/github/license/TylerYep/torchinfo)](https://github.com/TylerYep/torchinfo/blob/master/LICENSE)
+[![codecov](https://codecov.io/gh/TylerYep/torchinfo/branch/master/graph/badge.svg)](https://codecov.io/gh/TylerYep/torchinfo)
+[![Downloads](https://pepy.tech/badge/torchinfo)](https://pepy.tech/project/torchinfo)
+
+Torchinfo provides information complementary to what is provided by `print(your_model)` in PyTorch, similar to Tensorflow's `model.summary()` API to view the visualization of the model, which is helpful while debugging your network. In this project, we implement a similar functionality in PyTorch and create a clean, simple interface to use in your projects.
 
 This is a completely rewritten version of the original torchsummary and torchsummaryX projects by @sksq96 and @nmhkahn. This project addresses all of the issues and pull requests left on the original projects by introducing a completely new API.
 
 # Usage
-`pip install torch-summary`
+`pip install torchinfo`
 
 # How To Use
 ```python
-from torchsummary import summary
+from torchinfo import summary
 
 model = ConvNet()
-summary(model, (1, 28, 28))
+summary(model, (1, 28, 28), batch_dim=0)
 ```
 ```
 ==========================================================================================
@@ -84,10 +87,9 @@ Args:
             Default: None
 
     batch_dim (int):
-            Batch_dimension of input data. If batch_dim is None, the input data
-            is assumed to contain the batch dimension.
-            WARNING: in a future version, the default will change to None.
-            Default: 0
+            Batch_dimension of input data. If batch_dim is None, assume input data
+            contains the batch dimension, which is used in all calculations.
+            Default: None
 
     branching (bool):
             Whether to use the branching layout for the printed output.
@@ -128,14 +130,14 @@ Args:
 
 Return:
     ModelStatistics object
-            See torchsummary/model_statistics.py for more information.
+            See torchinfo/model_statistics.py for more information.
 """
 ```
 
 # Examples
 ## Get Model Summary as String
 ```python
-from torchsummary import summary
+from torchinfo import summary
 
 model_stats = summary(your_model, (3, 28, 28), verbose=0)
 summary_str = str(model_stats)
@@ -212,7 +214,7 @@ class MultipleInputNetDifferentDtypes(nn.Module):
 summary(model, [(1, 300), (1, 300)], dtypes=[torch.float, torch.long])
 ```
 Alternatively, you can also pass in the input_data itself, and
-torchsummary will automatically infer the data types.
+torchinfo will automatically infer the data types.
 
 ```python
 input_data = torch.randn(1, 300)
@@ -368,15 +370,13 @@ Estimated Total Size (MB): 0.78
 ```
 
 # Future Plans
-- Change project name to `torchinfo`. The API will eventually mature to the point that this project deserves its own name.
 - Support all types of inputs - showing tuples and dict inputs cleanly rather than only using the first tensor in the list.
-- Default `batch_dim` to `None` rather than `0`. Users must specify the batch size in the input shape, or pass in `batch_dim=0` in order to ignore it.
 - FunctionalNet unused; figure out a way to hook into functional layers.
 
 # Contributing
 All issues and pull requests are much appreciated! If you are wondering how to build the project:
 
-- torch-summary is actively developed using the lastest version of Python.
+- torchinfo is actively developed using the lastest version of Python.
     - Changes should be backward compatible with Python 3.6, but this is subject to change in the future.
     - Run `pip install -r requirements-dev.txt`. We use the latest versions of all dev packages.
     - First, be sure to run `./scripts/install-hooks`
